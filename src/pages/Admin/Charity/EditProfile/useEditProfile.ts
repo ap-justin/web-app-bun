@@ -18,6 +18,7 @@ import { createADR36Payload } from "./createADR36Payload";
 export default function useEditProfile() {
   const { id, cw3 } = useAdminResources<"charity">();
   const {
+    reset,
     handleSubmit,
     formState: { isSubmitting },
   } = useFormContext<FV>();
@@ -32,6 +33,7 @@ export default function useEditProfile() {
     logo,
     hq_country,
     categories_sdgs,
+    active_in_countries,
     ...newData
   }) => {
     try {
@@ -44,8 +46,10 @@ export default function useEditProfile() {
         logo: logoUrl,
         hq_country: hq_country.name,
         categories_sdgs: categories_sdgs.map((opt) => opt.value),
+        active_in_countries: active_in_countries.map((opt) => opt.value),
         ...newData,
       };
+
       const diff = getPayloadDiff(initial, changes);
 
       if (Object.entries(diff).length <= 0) {
@@ -86,6 +90,7 @@ export default function useEditProfile() {
   };
 
   return {
+    reset,
     editProfile: handleSubmit(editProfile),
     isSubmitting,
     id,

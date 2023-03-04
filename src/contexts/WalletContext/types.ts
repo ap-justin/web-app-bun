@@ -1,6 +1,5 @@
-import type { KeplrWalletConnectV1 } from "@keplr-wallet/wc-client";
 import type { ConnectedWallet as TerraConnectedWallet } from "@terra-money/wallet-provider";
-import type { Keplr, PubKey } from "@keplr-wallet/types";
+import type { Keplr } from "@keplr-wallet/types";
 import { InjectedProvider } from "types/evm";
 
 export type ProviderId =

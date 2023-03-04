@@ -24,22 +24,7 @@ export type Connected = {
 
 type Terra = { type: "terra"; post: TerraConnectedWallet["post"] };
 
-/** keplr types */
-export type WCSignDoc = {
-  chainId: string;
-  accountNumber: string;
-  authInfoBytes: string;
-  bodyBytes: string;
-};
-
-export type WCDirectSignRes = {
-  signature: { pub_key: PubKey; signature: string };
-  signDoc: WCSignDoc;
-};
-
-export type KeplrWC = {
-  signDirect(signer: string, doc: WCSignDoc): Promise<WCDirectSignRes>;
-};
+export type KeplrWC = Pick<Keplr, "signAmino" | "signDirect">;
 export type Cosmos = {
   type: "cosmos";
   client: Keplr | KeplrWC;

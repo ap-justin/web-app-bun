@@ -1,14 +1,9 @@
 import { KeplrQRCodeModalV1 } from "@keplr-wallet/wc-qrcode-modal";
 import SignClient from "@walletconnect/sign-client";
 import { useEffect, useState } from "react";
-import {
-  Connected,
-  Cosmos,
-  KeplrWC,
-  WCDirectSignRes,
-  Wallet,
-  WalletState,
-} from "../types";
+import { Connected, Cosmos, KeplrWC, Wallet, WalletState } from "../types";
+import { TxRaw } from "@keplr-wallet/proto-types/cosmos/tx/v1beta1/tx";
+import { SignDoc, WCSignAminoRes, WCSignDirectRes } from "types/cosmos";
 import icon from "assets/icons/wallets/keplr.png";
 
 const QRModal = new KeplrQRCodeModalV1();
@@ -47,7 +42,6 @@ export function useKeplrV2(): Wallet {
 
       if (prevSession) {
         setState({
-          type: "cosmos",
           status: "connected",
           ...(await getWalletInfo(client, prevSession)),
           disconnect,
@@ -57,6 +51,7 @@ export function useKeplrV2(): Wallet {
         setState({ status: "disconnected", connect });
       }
     })();
+    //eslint-disable-next-line
   }, []);
 
   function onSessionDelete() {
@@ -100,7 +95,6 @@ export function useKeplrV2(): Wallet {
 
     const session = await approval();
     setState({
-      type: "cosmos",
       status: "connected",
       ...(await getWalletInfo(client, session)),
       disconnect,
@@ -139,25 +133,55 @@ export function useKeplrV2(): Wallet {
 async function getWalletInfo(
   client: SignClient,
   session: WCSession
-): Promise<Pick<Connected & Cosmos, "address" | "chainId" | "client">> {
+): Promise<Pick<Connected, "address" | "chainId"> & Cosmos> {
   const { namespaces, topic } = session;
   const cosmos = namespaces.cosmos;
   const [, chainId, address] = cosmos.accounts[0].split(":");
 
+  const request = client.request.bind(client);
   const wcClient: KeplrWC = {
-    signDirect(signer, doc) {
-      return client.request<WCDirectSignRes>({
+    async signDirect(signer, chainId, doc: SignDoc) {
+      //doc is from cosmos/types SignDoc
+      const tx = TxRaw.fromPartial({
+        bodyBytes: doc.bodyBytes,
+        authInfoBytes: doc.authInfoBytes,
+      });
+      const { authInfoBytes, bodyBytes } = TxRaw.toJSON(tx) as any;
+
+      const { signature } = await request<WCSignDirectRes>({
         topic: topic,
         chainId,
         request: {
           method: "cosmos_signDirect",
+          params: {
+            signerAddress: signer,
+            signDoc: {
+              authInfoBytes,
+              bodyBytes,
+              chainId: doc.chainId,
+              accountNumber: doc.accountNumber?.toString(),
+            },
+          },
+        },
+      });
+      return { signature, signed: doc };
+    },
+    async signAmino(signer, chainId, doc) {
+      const { signature } = await request<WCSignAminoRes>({
+        topic: topic,
+        chainId,
+        request: {
+          method: "cosmos_signAmino",
           params: { signerAddress: signer, signDoc: doc },
         },
       });
+
+      return { signature, signed: doc };
     },
   };
 
   return {
+    type: "cosmos",
     chainId,
     address,
     client: wcClient,

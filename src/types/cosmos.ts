@@ -1,9 +1,12 @@
-import type { Keplr } from "@keplr-wallet/types";
+import type { Keplr, StdSignature } from "@keplr-wallet/types";
 
 // from type { Any } from "@keplr-wallet/proto-types/google/protobuf/any";
 export type { Coin } from "@keplr-wallet/proto-types/cosmos/base/v1beta1/coin";
 
-export type SignDoc = Parameters<Keplr["signDirect"]>[2];
+type RequiredDoc = Required<Parameters<Keplr["signDirect"]>[2]>;
+export type SignDoc = {
+  [K in keyof RequiredDoc]: Exclude<RequiredDoc[K], null>;
+};
 
 interface Attribute {
   readonly key: string;
@@ -54,3 +57,16 @@ export type JSONAccount = JSONAny<{
 export function isBroadcastError(res: BroadcastRes): res is BroadcastError {
   return !!(res as BroadcastError).code;
 }
+
+//alias
+export type WCSignature = StdSignature;
+
+export type WCSignAminoRes = {
+  signature: WCSignature;
+  // signDoc: no need, just return the same doc for broadcasting
+};
+
+export type WCSignDirectRes = {
+  signature: WCSignature;
+  //signDoc - no need, just return the same doc for broadcasting
+};

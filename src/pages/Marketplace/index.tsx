@@ -17,7 +17,6 @@ export default function Marketplace() {
       >
         <Hero classes="grid isolate mt-28 mb-16" />
       </div>
-
       <div className="grid grid-cols-[auto_1fr] gap-x-8 grid-rows-[auto_1fr] padded-container min-h-screen">
         <Toolbar classes="my-10 col-span-2" />
         <Sidebar

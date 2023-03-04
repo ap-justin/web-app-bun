@@ -1,6 +1,6 @@
 import type { KeplrWalletConnectV1 } from "@keplr-wallet/wc-client";
 import type { ConnectedWallet as TerraConnectedWallet } from "@terra-money/wallet-provider";
-import type { Keplr } from "@keplr-wallet/types";
+import type { Keplr, PubKey } from "@keplr-wallet/types";
 import { InjectedProvider } from "types/evm";
 
 export type ProviderId =
@@ -23,10 +23,28 @@ export type Connected = {
 };
 
 type Terra = { type: "terra"; post: TerraConnectedWallet["post"] };
+
+/** keplr types */
+export type WCSignDoc = {
+  chainId: string;
+  accountNumber: string;
+  authInfoBytes: string;
+  bodyBytes: string;
+};
+
+export type WCDirectSignRes = {
+  signature: { pub_key: PubKey; signature: string };
+  signDoc: WCSignDoc;
+};
+
+export type KeplrWC = {
+  signDirect(signer: string, doc: WCSignDoc): Promise<WCDirectSignRes>;
+};
 export type Cosmos = {
   type: "cosmos";
-  client: Keplr | KeplrWalletConnectV1;
+  client: Keplr | KeplrWC;
 };
+
 type EVM = {
   type: "evm";
   switchChain(chainId: string): Promise<void>;

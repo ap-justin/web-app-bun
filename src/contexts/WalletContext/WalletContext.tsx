@@ -8,6 +8,7 @@ import useInjectedProvider from "./useInjectedProvider";
 import useKeplr from "./useKeplr/useKeplr";
 import useTerra from "./useTerra";
 import { useEVMWC, useKeplrWC } from "./wallet-connect";
+import { useKeplrV2 } from "./wallet-connect/useKeplrV2";
 
 // import { useEVMWC, useKeplrWC } from "./wallet-connect";
 
@@ -35,7 +36,7 @@ export default function WalletContext(props: PropsWithChildren<{}>) {
   });
   const { extensions: terraExtensions, wc: terraWC } = useTerra();
   const keplr = useKeplr();
-  const keplrWC = useKeplrWC();
+  const keplrWC = useKeplrV2();
   const evmWC = useEVMWC();
 
   const mobiles = [evmWC, terraWC, ...(IS_TEST ? [] : [keplrWC])];

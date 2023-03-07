@@ -2681,36 +2681,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@keplr-wallet/proto-types@npm:0.11.38":
-  version: 0.11.38
-  resolution: "@keplr-wallet/proto-types@npm:0.11.38"
+"@keplr-wallet/proto-types@npm:^0.11.44":
+  version: 0.11.44
+  resolution: "@keplr-wallet/proto-types@npm:0.11.44"
   dependencies:
     long: ^4.0.0
     protobufjs: ^6.11.2
-  checksum: f27430047b85ac2c8277f0ccd96ee6440cc1c45ee9dd20b61e57f1462ff239b1d6885f3d1bf010336bde5aad728e1f6281f6f14891d26361b78f082d519f02ec
+  checksum: 55080aefef5152743837c4cb7674276ed33d62766a1ce9324916e8965bc356e27ee697205554ef698d8fd3011595f96b2aa56258e85d60826abf2e2ac007d799
   languageName: node
   linkType: hard
 
-"@keplr-wallet/types@npm:0.11.38":
-  version: 0.11.38
-  resolution: "@keplr-wallet/types@npm:0.11.38"
+"@keplr-wallet/types@npm:^0.11.44":
+  version: 0.11.44
+  resolution: "@keplr-wallet/types@npm:0.11.44"
   dependencies:
     axios: ^0.27.2
     long: ^4.0.0
-  checksum: 5977c479a16e5f3c7197d876c0692fcff93a6e58a7f12900f1dac1d2459460f7e2bcb098d91c2ac7528c703067aa5ae3ed6545bfbcca66b53836fb337beddd6d
+  checksum: 1bfe35d6f0a2737468bf31f6a1367dee414cdab6c65e707ed21162fbdfe7e8a3a978506dce0740889830f078113275203a29610d610d5f771e232ba67f91a38b
   languageName: node
   linkType: hard
 
-"@keplr-wallet/wc-qrcode-modal@npm:0.11.38":
-  version: 0.11.38
-  resolution: "@keplr-wallet/wc-qrcode-modal@npm:0.11.38"
+"@keplr-wallet/wc-qrcode-modal@npm:^0.11.44":
+  version: 0.11.44
+  resolution: "@keplr-wallet/wc-qrcode-modal@npm:0.11.44"
   dependencies:
     "@walletconnect/browser-utils": ^1.6.5
     "@walletconnect/types": ^1.6.5
     qrcode.react: ^1.0.1
     react: ^16.14.0
     react-dom: ^16.14.0
-  checksum: d68eee16af78e7455564639c9ad8eaa93d17bd6c3c8bdc7762f9dd6196011683f5ebfa9014f3e318840b0445ae681ba92f3effbf75f5526fc4fc8422690ae1b1
+  checksum: ab8d19b29edb1a3b7dc2f8ce3f1d8891b4b93e3397065fcb0cf4db9552272c9d392d38fbee1cf882b93a8262517c63142207b1da12c11ae29182cb17bab338be
   languageName: node
   linkType: hard
 
@@ -5172,9 +5172,9 @@ __metadata:
     "@headlessui/react": ^1.7.4
     "@hookform/error-message": ^2.0.0
     "@hookform/resolvers": ^2.9.8
-    "@keplr-wallet/proto-types": 0.11.38
-    "@keplr-wallet/types": 0.11.38
-    "@keplr-wallet/wc-qrcode-modal": 0.11.38
+    "@keplr-wallet/proto-types": ^0.11.44
+    "@keplr-wallet/types": ^0.11.44
+    "@keplr-wallet/wc-qrcode-modal": ^0.11.44
     "@peculiar/webcrypto": ^1.4.0
     "@reduxjs/toolkit": ^1.9.0
     "@terra-money/terra.js": ^3.1.7

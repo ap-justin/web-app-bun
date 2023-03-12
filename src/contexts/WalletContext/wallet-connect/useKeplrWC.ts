@@ -2,7 +2,14 @@ import { KeplrQRCodeModalV1 } from "@keplr-wallet/wc-qrcode-modal";
 import SignClient from "@walletconnect/sign-client";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Connected, Cosmos, KeplrWC, Wallet, WalletState } from "../types";
+import {
+  Connected,
+  Cosmos,
+  KeplrWC,
+  ProviderState,
+  Wallet,
+  WalletMeta,
+} from "../types";
 import { TxRaw } from "@keplr-wallet/proto-types/cosmos/tx/v1beta1/tx";
 import { SignDoc, WCSignAminoRes, WCSignDirectRes } from "types/cosmos";
 import icon from "assets/icons/wallets/keplr.png";
@@ -27,9 +34,8 @@ async function getClient(): Promise<SignClient> {
 
 /** NOTE: only use this wallet in mainnet */
 export function useKeplrWC(): Wallet {
-  const [state, setState] = useState<WalletState>({
+  const [state, setState] = useState<ProviderState>({
     status: "disconnected",
-    connect,
   });
 
   /** persistent connection */
@@ -42,21 +48,17 @@ export function useKeplrWC(): Wallet {
         .find((s) => s.peer.metadata.name === PEER_NAME);
 
       if (prevSession) {
-        setState({
-          status: "connected",
-          ...(await getWalletInfo(client, prevSession)),
-          disconnect,
-        });
+        setState(await connectedState(client, prevSession));
         client.on("session_delete", onSessionDelete);
       } else {
-        setState({ status: "disconnected", connect });
+        setState({ status: "disconnected" });
       }
     })();
     //eslint-disable-next-line
   }, []);
 
   function onSessionDelete() {
-    setState({ status: "disconnected", connect });
+    setState({ status: "disconnected" });
   }
 
   /** new connection */
@@ -91,7 +93,7 @@ export function useKeplrWC(): Wallet {
       // uri is only returned for new pairings
       if (uri) {
         QRModal.open(uri, (/** close callback */) => {
-          setState({ status: "disconnected", connect });
+          setState({ status: "disconnected" });
         });
       } else {
         toast.loading("Waiting for approval");
@@ -99,11 +101,7 @@ export function useKeplrWC(): Wallet {
       const session = await approval();
       toast.dismiss();
 
-      setState({
-        status: "connected",
-        ...(await getWalletInfo(client, session)),
-        disconnect,
-      });
+      setState(await connectedState(client, session));
 
       client.on("session_delete", onSessionDelete);
       if (uri) {
@@ -111,7 +109,7 @@ export function useKeplrWC(): Wallet {
       }
     } catch (err) {
       toast.dismiss();
-      setState({ status: "disconnected", connect });
+      setState({ status: "disconnected" });
       toast.error("Failed to connect to wallet");
     } finally {
       QRModal.close();
@@ -132,20 +130,26 @@ export function useKeplrWC(): Wallet {
       });
     }
     client.off("session_delete", onSessionDelete);
-    setState({ status: "disconnected", connect });
+    setState({ status: "disconnected" });
   }
-  return {
-    ...state,
+
+  const meta: WalletMeta = {
     logo: icon,
     id: "keplr-wc",
     name: "Keplr mobile",
   };
+
+  return {
+    ...state,
+    ...meta,
+    ...{ connect, disconnect },
+  };
 }
 
-async function getWalletInfo(
+async function connectedState(
   client: SignClient,
   session: WCSession
-): Promise<Pick<Connected, "address" | "chainId"> & Cosmos> {
+): Promise<Pick<Connected, "address" | "chainId" | "status"> & Cosmos> {
   const { namespaces, topic } = session;
   const cosmos = namespaces.cosmos;
 
@@ -196,6 +200,7 @@ async function getWalletInfo(
   };
 
   return {
+    status: "connected",
     type: "cosmos",
     chainId,
     address,

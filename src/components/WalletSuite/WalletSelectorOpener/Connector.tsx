@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { useModalContext } from "contexts/ModalContext";
 import { DisconnectedWallet } from "contexts/WalletContext";
-import ContentLoader from "components/ContentLoader";
+import Image from "components/Image";
 
 export default function Connector({ connect, logo, name }: DisconnectedWallet) {
   const { closeModal } = useModalContext();
@@ -14,24 +13,11 @@ export default function Connector({ connect, logo, name }: DisconnectedWallet) {
         connect();
       }}
     >
-      <Logo logo={logo} />
+      <Image
+        img={{ src: logo }}
+        className="w-12 h-12 border border-prim rounded-full"
+      />
       <span className="font-heading font-bold text-sm capitalize">{name}</span>
     </button>
-  );
-}
-
-function Logo({ logo }: { logo: string }) {
-  const [isLoading, setLoading] = useState(true);
-
-  return (
-    <>
-      {isLoading && <ContentLoader className="w-12 h-12 rounded" />}
-      <img
-        src={logo}
-        className={`w-12 h-12 object-contain ${isLoading ? "hidden" : ""}`}
-        alt=""
-        onLoad={() => setLoading(false)}
-      />
-    </>
   );
 }

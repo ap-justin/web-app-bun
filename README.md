@@ -6,7 +6,6 @@
 - `Node v16.18.0`
 
 ## Setup
-
 1. create `.env` file at the root of the project and add the following entries
 
 ```yaml
@@ -14,10 +13,13 @@
  GENERATE_SOURCEMAP=<TRUE | FALSE>
 
 # port used by development server
- PORT=<port number>
+PORT=<port number>
 
- REACT_APP_NETWORK=<LOCAL | TESTNET | MAINNET>
- REACT_APP_JUNO_LCD_NODE=<juno lcd>
+REACT_APP_NETWORK=<LOCAL | TESTNET | MAINNET>
+REACT_APP_JUNO_LCD_NODE=<juno lcd>
+
+# discard if doesn't want to enable AST features
+REACT_APP_APP_TYPE=AST
 
 # set these to override all JUNO LCDs and RPCs including 
 # REACT_APP_JUNO_LCD_NODE

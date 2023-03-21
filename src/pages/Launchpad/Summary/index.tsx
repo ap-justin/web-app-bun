@@ -13,7 +13,7 @@ import useCosmosTxSender from "hooks/useCosmosTxSender";
 import { getWasmAttribute, isEmpty, roundDown, roundDownToNum } from "helpers";
 import { EMAIL_SUPPORT, GENERIC_ERROR_MESSAGE } from "constants/common";
 import { appRoutes } from "constants/routes";
-import { routes } from "../constants";
+import { steps } from "../constants";
 import About from "./About";
 import Fees from "./Fees";
 import Management from "./Management";
@@ -30,7 +30,7 @@ export default function Summary() {
   const state = useGetter((state) => state.launchpad);
   if (!isCompleted(state)) return <Navigate to={`../${state.progress}`} />;
 
-  const { progress, ...completed } = state;
+  const { progress, network, ...completed } = state;
 
   const {
     1: about,
@@ -42,6 +42,10 @@ export default function Summary() {
   } = completed;
 
   async function submit() {
+    if (network === "polygon") {
+      return alert("Work in progress for polygon submission");
+    }
+
     if (!isConnected(wallet)) {
       return showModal(TxPrompt, { error: "Wallet is not connected" });
     }
@@ -117,10 +121,7 @@ export default function Summary() {
       />
       <Fees fees={fees} title="Fees" step={6} disabled={false} />
       <div className="grid grid-cols-2 sm:flex gap-2 border-t border-prim pt-8">
-        <Link
-          to={`../${routes[6]}`}
-          className="text-sm px-8 btn-outline-filled"
-        >
+        <Link to={`../${steps[6]}`} className="text-sm px-8 btn-outline-filled">
           Back
         </Link>
         <button
@@ -173,9 +174,6 @@ function toAIF(
       default: toPct(splits.default),
     },
     ignore_user_splits: !splits.isCustom,
-    split_max: toPct(splits.max),
-    split_min: toPct(splits.min),
-    split_default: toPct(splits.default),
     earnings_fee: fees.earnings.isActive
       ? toEndowFee(fees.earnings)
       : undefined,

@@ -9,7 +9,7 @@ import GiftCard from "contracts/GiftCard";
 import { condense, logger, scale, scaleToStr } from "helpers";
 import { estimateGas } from "helpers/cosmos/estimateGas";
 import { ap_wallets } from "constants/ap_wallets";
-import { EIPMethods } from "constants/ethereum";
+import { EIPMethods } from "constants/evm";
 import { estimateTerraGas } from "./estimateTerraGas";
 import getBreakdown from "./getBreakdown";
 

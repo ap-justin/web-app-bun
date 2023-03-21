@@ -6,7 +6,7 @@ import { invalidateApesTags } from "services/apes";
 import { processError } from "hooks/useErrorHandler";
 import { sendTx } from "helpers/cosmos/sendTx";
 import { chains } from "constants/chains";
-import { EIPMethods } from "constants/ethereum";
+import { EIPMethods } from "constants/evm";
 import donation, { setTxStatus } from "../donation";
 import logDonation from "./logDonation";
 

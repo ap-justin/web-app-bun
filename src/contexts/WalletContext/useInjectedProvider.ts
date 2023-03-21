@@ -6,7 +6,7 @@ import { AccountChangeHandler, ChainChangeHandler } from "types/evm";
 import { useLazyChainQuery } from "services/apes";
 import { getProvider, logger } from "helpers";
 import { chains } from "constants/chains";
-import { EIPMethods } from "constants/ethereum";
+import { EIPMethods } from "constants/evm";
 import { openInstaller } from "./Installer";
 import { isEVM, toPrefixedHex } from "./helpers";
 import {

@@ -6,7 +6,7 @@ import { appRoutes } from "constants/routes";
 export default function DesktopNav({ classes = "" }: { classes?: string }) {
   return (
     <nav className={`${classes} items-center justify-end font-body text-base`}>
-      <a href={BASE_DOMAIN} className={styles}>
+      <a href={BASE_DOMAIN} className={styles} style={{ textAlign: "right" }}>
         For Non-Profits
       </a>
       <NavLink className={styler} to={appRoutes.index}>

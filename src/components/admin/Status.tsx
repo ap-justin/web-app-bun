@@ -3,7 +3,7 @@ import { ProposalStatus } from "types/contracts";
 export function Status(props: { status: ProposalStatus }) {
   return (
     <p
-      className={`text-xs uppercase px-2 py-1 rounded-sm ${
+      className={`text-center text-xs font-semibold uppercase px-2 py-1 rounded-sm ${
         statusClasses[props.status]
       }`}
     >

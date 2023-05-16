@@ -86,7 +86,6 @@ type Txs = {
 
   "locked-withdraw.propose": Tx<{
     id: number;
-    beneficiary: string;
     addresses: string[];
     amounts: string[];
   }>;

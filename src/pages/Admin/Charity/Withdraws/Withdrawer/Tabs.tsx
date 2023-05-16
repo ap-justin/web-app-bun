@@ -8,9 +8,10 @@ const _tabs: AccountType[] = ["liquid", "locked"];
 type Props = {
   classes?: string;
   balances: EndowBalance;
+  tabLabels: { [key in string]: string };
 };
 
-export default function Tabs({ classes = "", balances }: Props) {
+export default function Tabs({ classes = "", balances, tabLabels }: Props) {
   return (
     <Tab.Group
       as="div"
@@ -22,7 +23,7 @@ export default function Tabs({ classes = "", balances }: Props) {
             key={`tab-${type}`}
             className="rounded-2xl flex items-center justify-center w-full h-full uppercase text-sm font-bold focus:outline-none aria-selected:bg-orange-l5 aria-selected:dark:bg-blue-d4 aria-selected:border aria-selected:border-prim"
           >
-            {type}
+            {tabLabels[type]}
           </Tab>
         ))}
       </Tab.List>

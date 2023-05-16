@@ -7,11 +7,17 @@ import WithdrawForm from "./WithdrawForm";
 
 const container = "dark:bg-blue-d6 border border-prim rounded max-w-lg  p-8";
 
+const _charityEndowmentTabs = { liquid: "endowment", locked: "current" };
+const _normalEndowmentTabs = { liquid: "liquid", locked: "locked" };
+
 export default function Withdrawer() {
   const { id, endow_type, maturityTime } = useAdminResources<"charity">();
   const queryState = useEndowBalanceQuery({ id });
 
+  // disable isLockAvailable feature
+  // not removing conditions for reference purpose
   const isLockAvailable =
+    true ||
     endow_type === "charity" ||
     (endow_type === "normal" && hasElapsed(maturityTime));
 
@@ -25,7 +31,15 @@ export default function Withdrawer() {
     >
       {(balances) =>
         isLockAvailable ? (
-          <Tabs balances={balances} classes={container} />
+          <Tabs
+            balances={balances}
+            classes={container}
+            tabLabels={
+              endow_type === "charity"
+                ? _charityEndowmentTabs
+                : _normalEndowmentTabs
+            }
+          />
         ) : (
           <WithdrawForm
             type="liquid"

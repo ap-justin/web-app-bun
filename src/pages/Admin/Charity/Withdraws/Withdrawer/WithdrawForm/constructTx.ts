@@ -53,7 +53,6 @@ export function constructTx(
   const [data, dest] = isLockedCharity
     ? encodeTx("locked-withdraw.propose", {
         id,
-        beneficiary,
         addresses,
         amounts,
       })

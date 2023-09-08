@@ -48,7 +48,7 @@ const GAS_PRICE = "0.075";
 
 // This is the multiplier used when auto-calculating the fees
 // https://github.com/cosmos/cosmjs/blob/5bd6c3922633070dbb0d68dd653dc037efdf3280/packages/stargate/src/signingstargateclient.ts#L290
-const GAS_ADJUSTMENT = 1.3;
+const GAS_ADJUSTMENT = 1.5;
 
 export default class Contract {
   wallet: WalletState | undefined;
@@ -118,14 +118,17 @@ export default class Contract {
       });
 
       const gas = res.gas_info.gas_used;
-      const adjusted = Math.ceil(+gas * GAS_ADJUSTMENT);
-      const feeAmount = condenseToNum(adjusted * +GAS_PRICE);
+      const adjustedGas = Math.ceil(+gas * GAS_ADJUSTMENT);
+      const atomicFeeAmount = Math.ceil(adjustedGas * +GAS_PRICE); //e.g 4253ujuno
+      const condensedFeeAmount = condenseToNum(atomicFeeAmount); //e.g 0.004253juno
 
       const authInfoWithFee: AuthInfo = {
         ...authInfo,
         fee: {
-          amount: [{ amount: GAS_PRICE, denom: native_currency.token_id }],
-          gasLimit: `${adjusted}`,
+          amount: [
+            { amount: `${atomicFeeAmount}`, denom: native_currency.token_id },
+          ],
+          gasLimit: `${adjustedGas}`,
           granter: "",
           payer: this.walletAddress,
         },
@@ -133,7 +136,7 @@ export default class Contract {
 
       //add fee to estimated Tx
       return {
-        feeAmount,
+        feeAmount: condensedFeeAmount,
         doc: {
           authInfoBytes: AuthInfo.encode(authInfoWithFee).finish(),
           bodyBytes,
